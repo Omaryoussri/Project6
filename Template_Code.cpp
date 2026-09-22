@@ -208,11 +208,14 @@ Image flipVertical(const Image& input) {
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
-    
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   output(height-1-y, x, c) = input(y, x, c)
-    
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                output(height - 1 - y, x, c) = input(y, x, c);
+            }
+        }
+    }
     return output;
 }
 
@@ -231,11 +234,15 @@ Image adjustBrightness(const Image& input, int value) {
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
-    
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   new_value = input(y, x, c) + value
-    //   output(y, x, c) = max(0, min(255, new_value))
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                int new_value = input(y, x, c) + value;
+                output(y, x, c) = max(0, min(255, new_value));
+            }
+        }
+    }
     
     return output;
 }
@@ -257,11 +264,15 @@ Image adjustContrast(const Image& input, float factor) {
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
-    
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   new_value = factor * (input(y, x, c) - 128) + 128
-    //   output(y, x, c) = max(0, min(255, new_value))
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                float new_value = factor * (input(y, x, c) - 128) + 128;
+                output(y, x, c) = max(0, min(255, static_cast<int>(new_value)));
+            }
+        }
+    }
     
     return output;
 }
@@ -282,13 +293,20 @@ Image applyBlur(const Image& input) {
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
-    
-    // TODO: Implement this function
-    // For each pixel (from y=1 to height-2, x=1 to width-2) and each channel:
-    //   sum = 0
-    //   For each neighbor (ky from -1 to 1, kx from -1 to 1):
-    //     sum += input(y+ky, x+kx, c)
-    //   output(y, x, c) = sum / 9
+
+    for (int y = 1; y < height - 1; y++) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int c = 0; c < channels; c++) {
+                int sum = 0;
+                for (int ky = -1; ky <= 1; ky++) {
+                    for (int kx = -1; kx <= 1; kx++) {
+                        sum += input(y + ky, x + kx, c);
+                    }
+                }
+                output(y, x, c) = sum / 9;
+            }
+        }
+    }
     
     return output;
 }
@@ -304,15 +322,18 @@ Image applyBlur(const Image& input) {
  * 3. Return the rotated image
  */
 Image rotate90(const Image& input) {
-    int height = input.getHeight();
+   int height = input.getHeight();
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(height, width, channels); // Width and height are swapped
-    
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   output(x, height-1-y, c) = input(y, x, c)
-    
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                output(x, height - 1 - y, c) = input(y, x, c);
+            }
+        }
+    }
     return output;
 }
 
@@ -354,7 +375,7 @@ void createTestImage(const string& filename) {
 }
 
 int main() {
-    /*
+    
     cout << "Image Processing with Matrices - Student Project\n";
     cout << "================================================\n\n";
     
@@ -425,7 +446,7 @@ int main() {
     
     cout << "\nAll operations completed successfully!\n";
     cout << "Check the generated PPM files to see the results.\n";
-    cout << "Use an image viewer that supports PPM format or convert them to PNG/JPG.\n"; */
+    cout << "Use an image viewer that supports PPM format or convert them to PNG/JPG.\n"; 
     
     return 0;
 }
